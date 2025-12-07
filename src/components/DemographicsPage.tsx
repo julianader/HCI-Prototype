@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Demographics } from '../types';
+import { LikertScale } from './LikertScale';
 
 interface Props {
   data: Demographics;
@@ -16,11 +17,10 @@ export const DemographicsPage: React.FC<Props> = ({ data, onChange, onNext }) =>
     });
   };
 
-  const handleRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const handleLikertChange = (name: string, value: number) => {
     onChange({
       ...data,
-      [name]: parseInt(value)
+      [name]: value
     });
   };
 
@@ -77,46 +77,22 @@ export const DemographicsPage: React.FC<Props> = ({ data, onChange, onNext }) =>
 
       <div className="demographics-card">
         <h2>Part 1</h2>
-        <div className="range-group">
-          <label>Computer Confidence (1 = Low, 7 = High)</label>
-          <div className="range-container">
-            <span>1</span>
-            <input
-              type="range"
-              name="computerConfidence"
-              min="1"
-              max="7"
-              value={data.computerConfidence}
-              onChange={handleRangeChange}
-            />
-            <span>7</span>
-          </div>
-          <div className="range-labels">
-              <span>Current: {data.computerConfidence}</span>
-          </div>
-        </div>
+        <LikertScale
+          label="Computer Confidence"
+          name="computerConfidence"
+          value={data.computerConfidence}
+          onChange={handleLikertChange}
+        />
       </div>
 
       <div className="demographics-card">
         <h2>Part 2</h2>
-        <div className="range-group">
-          <label>Current Mood (1 = Negative, 7 = Positive)</label>
-          <div className="range-container">
-            <span>1</span>
-            <input
-              type="range"
-              name="currentMood"
-              min="1"
-              max="7"
-              value={data.currentMood}
-              onChange={handleRangeChange}
-            />
-            <span>7</span>
-          </div>
-          <div className="range-labels">
-              <span>Current: {data.currentMood}</span>
-          </div>
-        </div>
+        <LikertScale
+          label="Current Mood"
+          name="currentMood"
+          value={data.currentMood}
+          onChange={handleLikertChange}
+        />
       </div>
       
       <div style={{ textAlign: 'right' }}>
