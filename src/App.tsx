@@ -76,9 +76,25 @@ function App() {
     setPage(2);
   };
 
-  const handlePostSurveySubmit = () => {
-    // Here you could save the data to a server, local storage, etc.
-    console.log('Post-survey submitted:', sessionData);
+  const handlePostSurveySubmit = async () => {
+    try {
+      // Send data to Google Sheets
+      const response = await fetch('https://script.google.com/macros/s/AKfycbw1Syh06gO3CQvG7mKzMDYPtdjJnL9TuPeiESkMs8eZG5xzF-OuDUhwDclkwVGFywCh-w/exec', {
+        method: 'POST',
+        mode: 'no-cors', // Handle CORS for Google Apps Script
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(sessionData),
+      });
+
+      console.log('Data submission completed, response status:', response.status);
+      console.log('Session data sent:', sessionData);
+    } catch (error) {
+      console.error('Failed to save data:', error);
+      // Still proceed to thank you page even if saving fails
+    }
+
     setPage(3);
   };
 
