@@ -5,18 +5,20 @@ import type {
     FieldErrorResult,
     FieldErrorStrategyContext,
 } from './FieldErrorStrategy';
+
 import { TeamNameErrorStrategy } from './TeamNameErrorStrategy';
 import { EmailErrorStrategy } from './EmailErrorStrategy';
-import { DescriptionErrorStrategy } from './DescriptionErrorStrategy.ts';
-import { LanguagesErrorStrategy} from "./LanguagesErrorStrategy.ts";
-
-// add new strategy classes here as imports
+import { DescriptionErrorStrategy } from './DescriptionErrorStrategy';
+import { LanguagesErrorStrategy } from './LanguagesErrorStrategy';
+import { SubmitErrorStrategy } from './SubmitErrorStrategy';
+import { RandomErrorStrategy } from './RandomErrorStrategy';
 
 export class FieldErrorManager {
     private events: ErrorEvent[] = [];
     private currentErrorStartTime: number | null = null;
 
     private shownTypes: Set<ErrorType> = new Set();
+
     private readonly allTypes: ErrorType[] = [
         'apologetic',
         'neutral',
@@ -25,18 +27,21 @@ export class FieldErrorManager {
 
     private strategies: Map<string, FieldErrorStrategy>;
 
+    private submitStrategy: SubmitErrorStrategy;
+    private randomStrategy: RandomErrorStrategy;
+
     constructor() {
         const strategyList: FieldErrorStrategy[] = [
             new TeamNameErrorStrategy(),
             new EmailErrorStrategy(),
             new DescriptionErrorStrategy(),
             new LanguagesErrorStrategy(),
-            // add new strategy classes here inside the constructor
+            // add additional error messages
         ];
 
-        this.strategies = new Map(
-            strategyList.map(s => [s.fieldName, s]),
-        );
+        this.strategies = new Map(strategyList.map((s) => [s.fieldName, s]));
+        this.submitStrategy = new SubmitErrorStrategy();
+        this.randomStrategy = new RandomErrorStrategy();
     }
 
     public handleFieldBlur(fieldName: string, value: string): any | null {
@@ -56,7 +61,35 @@ export class FieldErrorManager {
         return this.buildError(fieldName, res);
     }
 
-    public handleClose(error: any) {
+    public handleSubmit(formData: Record<string, any>): any | null {
+        const ctx: FieldErrorStrategyContext = {
+            shownTypes: this.shownTypes,
+            allTypes: this.allTypes,
+            pickVariantWithTypePreference: (variants: FieldErrorResult[]) =>
+                this.pickVariantWithTypePreference(variants),
+        };
+
+        const res = this.submitStrategy.validate(formData, ctx);
+        if (!res) return null;
+
+        return this.buildError('submit', res);
+    }
+
+    public getRandomConnectionError(): any | null {
+        const ctx: FieldErrorStrategyContext = {
+            shownTypes: this.shownTypes,
+            allTypes: this.allTypes,
+            pickVariantWithTypePreference: (variants: FieldErrorResult[]) =>
+                this.pickVariantWithTypePreference(variants),
+        };
+
+        const res = this.randomStrategy.getRandomError(ctx);
+        if (!res) return null;
+
+        return this.buildError('connection', res);
+    }
+
+    public handleClose(error: any): void {
         if (this.currentErrorStartTime == null) return;
 
         const event: ErrorEvent = {
@@ -75,19 +108,20 @@ export class FieldErrorManager {
     }
 
     public getMissingTypes(): ErrorType[] {
-        return this.allTypes.filter(t => !this.shownTypes.has(t));
+        return this.allTypes.filter((t) => !this.shownTypes.has(t));
     }
 
     private pickVariantWithTypePreference(
         variants: FieldErrorResult[],
     ): FieldErrorResult {
         const missingTypes = this.allTypes.filter(
-            t => !this.shownTypes.has(t),
+            (t) => !this.shownTypes.has(t),
         );
 
         let candidateVariants = variants;
+
         if (missingTypes.length > 0) {
-            const filtered = variants.filter(v =>
+            const filtered = variants.filter((v) =>
                 missingTypes.includes(v.type),
             );
             if (filtered.length > 0) {

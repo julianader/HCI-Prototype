@@ -4,7 +4,7 @@ import type {
 } from './FieldErrorStrategy';
 
 export class SubmitErrorStrategy {
-    private variants: FieldErrorResult[] = [
+    private missingFieldVariants: FieldErrorResult[] = [
         {
             type: 'apologetic',
             title: 'Missing fields',
@@ -28,6 +28,30 @@ export class SubmitErrorStrategy {
         },
     ];
 
+    private submitErrorVariants: FieldErrorResult[] = [
+        {
+            type: 'apologetic',
+            title: 'Server error',
+            message:
+                'Sorry, our servers are experiencing some technical difficulties. Please try submitting again.',
+            icon: 'warning',
+        },
+        {
+            type: 'neutral',
+            title: 'Connection timeout',
+            message:
+                'The submission timed out. Please try again.',
+            icon: 'alert',
+        },
+        {
+            type: 'non-apologetic',
+            title: 'Submission failed',
+            message:
+                'Something went wrong with your submission. Try again!',
+            icon: 'error',
+        },
+    ];
+
     validate(
         formData: Record<string, any>,
         ctx: FieldErrorStrategyContext,
@@ -38,6 +62,7 @@ export class SubmitErrorStrategy {
             'description',
             'programmingLanguages',
             'email',
+            'githubUrl',
         ];
 
         const hasEmpty = requiredFields.some(fieldName => {
@@ -46,10 +71,12 @@ export class SubmitErrorStrategy {
             return String(value).trim().length === 0;
         });
 
-        if (!hasEmpty) {
-            return null;
+        if (hasEmpty) {
+            // Show missing fields error
+            return ctx.pickVariantWithTypePreference(this.missingFieldVariants);
+        } else {
+            // All fields filled - show submit error
+            return ctx.pickVariantWithTypePreference(this.submitErrorVariants);
         }
-
-        return ctx.pickVariantWithTypePreference(this.variants);
     }
 }

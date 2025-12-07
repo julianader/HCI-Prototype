@@ -24,13 +24,44 @@ export const RegistrationPage: React.FC<Props> = ({ onComplete }) => {
     const [currentError, setCurrentError] = useState<ErrorMessage | null>(null);
     const [errorEvents, setErrorEvents] = useState<ErrorEvent[]>([]);
 
-    // FieldErrorManager nur einmal pro Component-Instanz erzeugen
     const errorManagerRef = useRef<FieldErrorManager | null>(null);
+    const currentErrorRef = useRef<ErrorMessage | null>(null);
+    const pendingRandomErrorRef = useRef<ErrorMessage | null>(null);
+    const submitErrorShownRef = useRef<boolean>(false);
+
     useEffect(() => {
         if (!errorManagerRef.current) {
             errorManagerRef.current = new FieldErrorManager();
         }
+
+        const mgr = errorManagerRef.current;
+        if (!mgr) return;
+
+        const delay = 20000 + Math.random() * 30000;
+        const timeoutId = window.setTimeout(() => {
+            const manager = errorManagerRef.current;
+            if (!manager) return;
+
+            const randomError = manager.getRandomConnectionError
+                ? manager.getRandomConnectionError()
+                : null;
+            if (!randomError) return;
+
+            if (currentErrorRef.current) {
+                pendingRandomErrorRef.current = randomError as ErrorMessage;
+            } else {
+                setCurrentError(randomError as ErrorMessage);
+            }
+        }, delay);
+
+        return () => {
+            window.clearTimeout(timeoutId);
+        };
     }, []);
+
+    useEffect(() => {
+        currentErrorRef.current = currentError;
+    }, [currentError]);
 
     const handleInputChange = (
         e: React.ChangeEvent<
@@ -54,11 +85,13 @@ export const RegistrationPage: React.FC<Props> = ({ onComplete }) => {
         const mgr = errorManagerRef.current;
         if (!mgr) return;
 
-        // Don't trigger new errors if an error is already showing
+        // Don't trigger new field errors if an error is already showing
         if (currentError) return;
 
         const error = mgr.handleFieldBlur(name, value);
-        setCurrentError(error);
+        if (error) {
+            setCurrentError(error as ErrorMessage);
+        }
     };
 
     const handleCloseError = () => {
@@ -67,13 +100,48 @@ export const RegistrationPage: React.FC<Props> = ({ onComplete }) => {
             mgr.handleClose(currentError);
             setErrorEvents(mgr.getEvents());
         }
+
         setCurrentError(null);
+
+        const queued = pendingRandomErrorRef.current;
+        if (queued) {
+            pendingRandomErrorRef.current = null;
+            setCurrentError(queued);
+        }
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        const mgr = errorManagerRef.current;
+        if (!mgr) {
+            onComplete(errorEvents);
+            return;
+        }
 
-        onComplete(errorEvents);
+        const submitError = mgr.handleSubmit(formData as Record<string, any>);
+        if (submitError) {
+            // Check if this is a submit error (not missing fields) and we've already shown one
+            const isMissingFieldsError = submitError.title === 'Missing fields';
+            if (!isMissingFieldsError && submitErrorShownRef.current) {
+                // We've already shown a submit error, now allow submission
+                submitErrorShownRef.current = false; // Reset for next time
+            } else {
+                // Show the error
+                if (!isMissingFieldsError) {
+                    submitErrorShownRef.current = true;
+                }
+                setCurrentError(submitError as ErrorMessage);
+                return;
+            }
+        }
+
+        // Clear any pending random errors since we're completing
+        pendingRandomErrorRef.current = null;
+        submitErrorShownRef.current = false; // Reset for next submission cycle
+
+        const finalEvents = mgr.getEvents();
+        setErrorEvents(finalEvents);
+        onComplete(finalEvents);
     };
 
     return (
