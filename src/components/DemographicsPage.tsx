@@ -78,20 +78,53 @@ export const DemographicsPage: React.FC<Props> = ({ data, onChange, onNext }) =>
       <div className="demographics-card">
         <h2>Part 1</h2>
         <LikertScale
-          label="Computer Confidence"
-          name="computerConfidence"
-          value={data.computerConfidence}
+          label="How would you rate your current mood?"
+          name="currentMood"
+          value={data.currentMood}
           onChange={handleLikertChange}
+          useEmojis={true}
         />
       </div>
 
       <div className="demographics-card">
         <h2>Part 2</h2>
+        <p style={{ marginBottom: '1rem' }}>
+          Please rate how much you agree with the following statements.<br />
+          <span style={{ fontSize: '0.95em', color: '#666' }}>
+            1 - Strongly disagree, 5 - Strongly agree.
+          </span>
+        </p>
         <LikertScale
-          label="Current Mood"
-          name="currentMood"
-          value={data.currentMood}
+          label="I feel confident using computers."
+          name="part2_confidentUsingComputers"
+          value={data.part2_confidentUsingComputers}
           onChange={handleLikertChange}
+          minLabel="Strongly disagree"
+          maxLabel="Strongly agree"
+        />
+        <LikertScale
+          label="I can usually figure out solutions when I have problems using websites or software."
+          name="part2_solveWebsiteProblems"
+          value={data.part2_solveWebsiteProblems}
+          onChange={handleLikertChange}
+          minLabel="Strongly disagree"
+          maxLabel="Strongly agree"
+        />
+        <LikertScale
+          label="I feel comfortable exploring new online interfaces without help."
+          name="part2_exploreInterfaces"
+          value={data.part2_exploreInterfaces}
+          onChange={handleLikertChange}
+          minLabel="Strongly disagree"
+          maxLabel="Strongly agree"
+        />
+        <LikertScale
+          label="Technical errors or unexpected messages do not significantly reduce my confidence."
+          name="part2_errorsConfidence"
+          value={data.part2_errorsConfidence}
+          onChange={handleLikertChange}
+          minLabel="Strongly disagree"
+          maxLabel="Strongly agree"
         />
       </div>
 

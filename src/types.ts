@@ -6,6 +6,10 @@ export interface Demographics {
   gender: string;
   computerConfidence: number; // 1-7
   currentMood: number; // 1-7
+  part2_confidentUsingComputers: number; // 1-5
+  part2_solveWebsiteProblems: number; // 1-5
+  part2_exploreInterfaces: number; // 1-5
+  part2_errorsConfidence: number; // 1-5
 }
 
 export interface ErrorEvent {
