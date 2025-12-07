@@ -27,7 +27,7 @@ export const ThankYouPage: React.FC = () => {
 
         <div className="thank-you-supervision">
           <p>Under the supervision of:</p>
-          <p className="professor-name">Katherin Probst</p>
+          <p className="professor-name">Kathrin Probst</p>
         </div>
 
         <div className="thank-you-course">
