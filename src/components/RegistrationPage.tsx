@@ -3,6 +3,8 @@ import type { ErrorMessage } from '../data/errors';
 import { ErrorPopup } from './ErrorPopup';
 import type { ErrorEvent } from '../types';
 import { FieldErrorManager } from '../components/FieldErrorManager';
+import Header from './Header';
+import Footer from './Footer';
 
 interface Props {
     onComplete: (errorEvents: ErrorEvent[]) => void;
@@ -75,99 +77,72 @@ export const RegistrationPage: React.FC<Props> = ({ onComplete }) => {
 
     return (
         <div className="registration-page">
+            <Header />
             {currentError && (
                 <ErrorPopup error={currentError} onClose={handleCloseError} />
             )}
+            <main className="registration-content">
+                <h1 className="main-title">HACKATHON 2025</h1>
 
-            <form onSubmit={handleSubmit}>
-                <h1>Hackathon Registration</h1>
+                <section className="event-about">
+                    <h2>01 // ABOUT EVENT</h2>
+                    <p>
+                        Join the 48-hour coding marathon where ideas become reality.
+                        Top developers, designers, and innovators compete to solve real-world challenges
+                        using cutting-edge technology. Network with industry leaders, access exclusive tools,
+                        and compete for prizes and career opportunities.
+                    </p>
+                </section>
 
-                <div className="form-group">
-                    <label htmlFor="teamName">Team Name</label>
-                    <input
-                        type="text"
-                        id="teamName"
-                        name="teamName"
-                        value={formData.teamName}
-                        onChange={handleInputChange}
-                        onBlur={handleBlur}
-                        placeholder="Awesome Hackers"
-                    />
-                </div>
+                <form onSubmit={handleSubmit}>
+                    <section className="form-section">
+                        <h2>02 // REGISTRATION</h2>
+                        <div className="form-group">
+                            <label htmlFor="teamName">Team Name</label>
+                            <input type="text" id="teamName" name="teamName" value={formData.teamName} onChange={handleInputChange} onBlur={handleBlur} />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="email">Email</label>
+                            <input type="email" id="email" name="email" value={formData.email} onChange={handleInputChange} onBlur={handleBlur} />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="projectTitle">Project Title</label>
+                            <input type="text" id="projectTitle" name="projectTitle" value={formData.projectTitle} onChange={handleInputChange} onBlur={handleBlur} />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="description">Project Description</label>
+                            <textarea id="description" name="description" value={formData.description} onChange={handleInputChange} onBlur={handleBlur} rows={4} />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="programmingLanguages">Programming Languages</label>
+                            <input type="text" id="programmingLanguages" name="programmingLanguages" value={formData.programmingLanguages} onChange={handleInputChange} onBlur={handleBlur} />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="githubUrl">Github URL</label>
+                            <input type="text" id="githubUrl" name="githubUrl" value={formData.githubUrl} onChange={handleInputChange} onBlur={handleBlur} />
+                        </div>
+                    </section>
 
-                <div className="form-group">
-                    <label htmlFor="projectTitle">Project Title</label>
-                    <input
-                        type="text"
-                        id="projectTitle"
-                        name="projectTitle"
-                        value={formData.projectTitle}
-                        onChange={handleInputChange}
-                        onBlur={handleBlur}
-                        placeholder="My Next Big Thing"
-                    />
-                </div>
+                    <section className="form-section">
+                        <h2>03 // CREATE ACCOUNT</h2>
+                        <div className="form-group">
+                            <label htmlFor="participants">Number of Participants</label>
+                            <select id="participants" name="participants" value={formData.participants} onChange={handleInputChange} onBlur={handleBlur}>
+                                {[1, 2, 3, 4, 5].map(n => (
+                                    <option key={n} value={n}>
+                                        {n}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </section>
 
-                <div className="form-group">
-                    <label htmlFor="description">Project Description</label>
-                    <textarea
-                        id="description"
-                        name="description"
-                        value={formData.description}
-                        onChange={handleInputChange}
-                        onBlur={handleBlur}
-                        placeholder="Describe your idea..."
-                        rows={4}
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="programmingLanguage">Programming Languages</label>
-                    <input
-                        type="text"
-                        id="programmingLanguage"
-                        name="programmingLanguage"
-                        value={formData.programmingLanguages}
-                        onChange={handleInputChange}
-                        onBlur={handleBlur}
-                        placeholder="prefered programming language"
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="email">Contact Email</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        onBlur={handleBlur}
-                        placeholder="you@example.com"
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="participants">Number of Participants</label>
-                    <select
-                        id="participants"
-                        name="participants"
-                        value={formData.participants}
-                        onChange={handleInputChange}
-                        onBlur={handleBlur}
-                    >
-                        {[1, 2, 3, 4, 5].map(n => (
-                            <option key={n} value={n}>
-                                {n}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <button type="submit" className="btn btn-primary">
-                    Submit Registration
-                </button>
-            </form>
+                    <button type="submit" className="btn-submit">
+                        SUBMIT
+                    </button>
+                </form>
+            </main>
+            <Footer />
         </div>
     );
 };
