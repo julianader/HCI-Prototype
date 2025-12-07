@@ -3,7 +3,7 @@ import { DemographicsPage } from './components/DemographicsPage';
 import { RegistrationPage } from './components/RegistrationPage';
 import { SummaryPage } from './components/SummaryPage';
 import { ThankYouPage } from './components/ThankYouPage';
-import type { Demographics, PostSurvey, SessionData, ErrorEvent, RegistrationData } from './types';
+import type { Demographics, PostSurvey, SessionData, ErrorEvent } from './types';
 import './styles/main.scss';
 
 function App() {
@@ -89,7 +89,7 @@ function App() {
   const handlePostSurveySubmit = async () => {
     try {
       // Send data to Google Sheets
-      const response = await fetch('https://script.google.com/macros/s/AKfycbx8X-fU4l5xKUT_77AB3tN_Flut88EN7oI63PfTcU6Sz28bq53M4RhKonv-N2Yf7pIkdA/exec', {
+      await fetch('https://script.google.com/macros/s/AKfycbx8X-fU4l5xKUT_77AB3tN_Flut88EN7oI63PfTcU6Sz28bq53M4RhKonv-N2Yf7pIkdA/exec', {
         method: 'POST',
         mode: 'no-cors', // Handle CORS for Google Apps Script
         headers: {
