@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { DemographicsPage } from './components/DemographicsPage';
 import { RegistrationPage } from './components/RegistrationPage';
 import { SummaryPage } from './components/SummaryPage';
+import { ThankYouPage } from './components/ThankYouPage';
 import type { Demographics, PostSurvey, SessionData, ErrorEvent } from './types';
 import './styles/main.scss';
 
@@ -78,7 +79,7 @@ function App() {
   const handlePostSurveySubmit = () => {
     // Here you could save the data to a server, local storage, etc.
     console.log('Post-survey submitted:', sessionData);
-    alert('Thank you for completing the survey!');
+    setPage(3);
   };
 
   return (
@@ -103,6 +104,10 @@ function App() {
           onPostSurveyChange={handlePostSurveyChange}
           onSubmit={handlePostSurveySubmit}
         />
+      )}
+
+      {page === 3 && (
+        <ThankYouPage />
       )}
     </div>
   );
