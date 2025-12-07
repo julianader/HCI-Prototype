@@ -22,12 +22,12 @@ export const ErrorPopup: React.FC<Props> = ({ error, onClose }) => {
     <div className="popup-overlay">
       <div className={`error-popup ${error.bgColor} ${error.borderColor}`}>
         <div className="popup-header">
-          <div className={`icon-wrapper ${error.icon}`}>
+          <div className={`icon-wrapper ${error.type}`}>
             {getIcon()}
           </div>
           <div className="content">
-            <h3 className={error.textColor}>{error.title}</h3>
-            <p className={error.textColor}>{error.message}</p>
+            <h3 className={`error-title ${error.type}`}>{error.title}</h3>
+            <p className={`error-message ${error.type}`}>{error.message}</p>
           </div>
           <button className="close-btn" onClick={onClose}>
             <X size={20} />

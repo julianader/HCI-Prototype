@@ -246,6 +246,7 @@ h2 {
   textarea {
     background-color: transparent;
     border: 1px solid #555;
+    color: white;
     border-radius: 12px;
     padding: 0.75rem 1rem;
     width: 100%;
@@ -413,29 +414,30 @@ h2 {
 }
 
 .error-popup {
-  background: white;
+  background: #2a2a2a;
   border-radius: 20px;
   width: 90%;
   max-width: 480px;
   position: relative;
-  box-shadow: 
-    0 25px 50px -12px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
   overflow: hidden;
   animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   transform-origin: center center;
-  
-  &.bg-emerald-50 { 
-    background: linear-gradient(to bottom right, #ecfdf5, #d1fae5);
-    border: 2px solid #34d399; 
+  border: 2px solid #444;
+
+  &.bg-emerald-50 {
+    background: linear-gradient(to bottom right, #1a2a1a, #2a3a2a);
+    border: 2px solid #34d399;
   }
-  &.bg-slate-50 { 
-    background: linear-gradient(to bottom right, #f8fafc, #e2e8f0);
-    border: 2px solid #94a3b8; 
+  &.bg-slate-50 {
+    background: linear-gradient(to bottom right, #2a2a2a, #3a3a3a);
+    border: 2px solid #64748b;
   }
-  &.bg-red-50 { 
-    background: linear-gradient(to bottom right, #fef2f2, #fee2e2);
-    border: 2px solid #f87171; 
+  &.bg-red-50 {
+    background: linear-gradient(to bottom right, #2a1a1a, #3a2a2a);
+    border: 2px solid #f87171;
   }
   
   .popup-header {
@@ -447,58 +449,66 @@ h2 {
       padding: 0.75rem;
       border-radius: 16px;
       margin-right: 1.25rem;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      
-      &.alert, &.wifi {
-        background-color: white;
-        color: #059669;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      background-color: #3a3a3a;
+
+      &.apologetic {
+        color: #34d399;
       }
-      
-      &.warning {
-        background-color: white;
-        color: #475569;
+
+      &.non-apologetic {
+        color: #f87171;
       }
-      
-      &.error {
-        background-color: white;
-        color: #dc2626;
+
+      &.neutral {
+        color: #64748b;
       }
     }
     
     .content {
       flex: 1;
-      
-      h3 {
-        margin: 0 0 0.5rem 0;
-        font-size: 1.25rem;
-        font-weight: 700;
-      }
-      
-      p {
+
+      .error-title, .error-message {
         margin: 0;
         font-size: 1rem;
         line-height: 1.5;
+      }
+
+      .error-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      .error-message {
         opacity: 0.9;
+      }
+
+      .apologetic,
+      .non-apologetic,
+      .neutral {
+        color: #ffffff;
       }
     }
     
     .close-btn {
-      background: white;
-      border: none;
+      background: #3a3a3a;
+      border: 1px solid #555;
       cursor: pointer;
       padding: 0.5rem;
       border-radius: 50%;
-      color: #6b7280;
+      color: #94a3b8;
       transition: all 0.2s;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
       position: absolute;
       top: 1rem;
       right: 1rem;
-      
+
       &:hover {
-        color: #111827;
+        color: #ffffff;
+        background: #4a4a4a;
         transform: rotate(90deg);
-        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.4);
       }
     }
   }

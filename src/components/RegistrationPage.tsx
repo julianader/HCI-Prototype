@@ -37,7 +37,7 @@ export const RegistrationPage: React.FC<Props> = ({ onComplete }) => {
         const mgr = errorManagerRef.current;
         if (!mgr) return;
 
-        const delay = 20000 + Math.random() * 30000;
+        const delay = 10000 + Math.random() * 15000;
         const timeoutId = window.setTimeout(() => {
             const manager = errorManagerRef.current;
             if (!manager) return;
@@ -106,7 +106,10 @@ export const RegistrationPage: React.FC<Props> = ({ onComplete }) => {
         const queued = pendingRandomErrorRef.current;
         if (queued) {
             pendingRandomErrorRef.current = null;
-            setCurrentError(queued);
+            // Add a delay before showing the queued error
+            setTimeout(() => {
+                setCurrentError(queued);
+            }, 1500); // 1.5 second delay
         }
     };
 
