@@ -18,10 +18,10 @@ export const ThankYouPage: React.FC = () => {
         <div className="thank-you-team">
           <h3>Team Members:</h3>
           <ul>
-            <li>Lisa</li>
-            <li>Polina</li>
-            <li>Niklas</li>
-            <li>Julia</li>
+            <li>Elizaveta Voropaeva</li>
+            <li>Polina Averkova</li>
+            <li>Niklas Mikeska</li>
+            <li>Julia Naguib</li>
           </ul>
         </div>
 

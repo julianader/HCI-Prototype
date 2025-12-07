@@ -18,8 +18,15 @@ Data is sent to: `https://script.google.com/macros/s/AKfycbyUMwVwKqp6o48C4KyXAM4
 Make sure your Google Sheet has these column headers (row 1):
 
 ```
-Timestamp | Full Name | Age | Gender | Computer Confidence | Current Mood | Confident Using Computers | Solve Website Problems | Explore Interfaces | Errors Confidence | Team Name | Project Title | Description | Programming Languages | Email | GitHub URL | Participants | Mood After Task | Task Duration (ms) | Error Events Count | part21_aestheticallyAppealing | part21_feltIrritated | part21_pleasingAppearance | part21_helpedUnderstand | part21_increasedStress | part21_clearUnderstandable | part22_increasedStress | part22_pleasingAppearance | part22_helpedUnderstand | part22_positiveVisualImpression | part22_feltFrustrated | part22_guidedEffectively | part23_guidedEffectively | part23_aestheticallyAppealing | part23_feltFrustrated | part23_positiveVisualImpression | part23_clearUnderstandable | part23_feltIrritated
+Timestamp | Full Name | Age | Gender | Computer Confidence | Current Mood | Confident Using Computers | Solve Website Problems | Explore Interfaces | Errors Confidence | Team Name | Project Title | Description | Programming Languages | Email | GitHub URL | Participants | Mood After Task | Task Duration (seconds) | Error Events Count | part21_aestheticallyAppealing | part21_feltIrritated | part21_pleasingAppearance | part21_helpedUnderstand | part21_increasedStress | part21_clearUnderstandable | part22_increasedStress | part22_pleasingAppearance | part22_helpedUnderstand | part22_positiveVisualImpression | part22_feltFrustrated | part22_guidedEffectively | part23_guidedEffectively | part23_aestheticallyAppealing | part23_feltFrustrated | part23_positiveVisualImpression | part23_clearUnderstandable | part23_feltIrritated
 ```
+
+### Time Display
+
+**Task Duration column now shows seconds automatically:**
+- Data is sent directly in seconds (no milliseconds)
+- Empty durations show as blank (not zero)
+- Example: 38.087 seconds for a ~38 second task
 
 ### UPDATED Google Apps Script Code
 
@@ -56,7 +63,7 @@ function doPost(e) {
       data.registration?.githubUrl || '', // P: GitHub URL
       data.registration?.participants || '', // Q: Participants
       data.postSurvey?.moodAfterTask || '', // R: Mood After Task
-      data.startTime && data.endTime ? data.endTime - data.startTime : '', // S: Task Duration
+      data.startTime && data.endTime ? (data.endTime - data.startTime) / 1000 : '', // S: Task Duration (seconds)
       data.errorEvents?.length || 0, // T: Error Events Count
       // Post-survey questions (columns U-AJ)
       data.postSurvey?.part21_aestheticallyAppealing || '',
