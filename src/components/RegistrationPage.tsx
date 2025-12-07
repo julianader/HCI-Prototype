@@ -12,15 +12,13 @@ interface Props {
 
 export const RegistrationPage: React.FC<Props> = ({ onComplete }) => {
     const [formData, setFormData] = useState({
-        name: '',
+        teamName: '',
+        projectTitle: '',
+        description: '',
+        programmingLanguages: '',
         email: '',
-        role: '',
-        experienceLevel: '',
-        team: '',
-        links: '',
-        username: '',
-        password: '',
-        confirmPassword: '',
+        githubUrl: '',
+        participants: 1,
     });
 
     const [currentError, setCurrentError] = useState<ErrorMessage | null>(null);
@@ -100,44 +98,42 @@ export const RegistrationPage: React.FC<Props> = ({ onComplete }) => {
                     <section className="form-section">
                         <h2>02 // REGISTRATION</h2>
                         <div className="form-group">
-                            <label htmlFor="name">Name</label>
-                            <input type="text" id="name" name="name" value={formData.name} onChange={handleInputChange} onBlur={handleBlur} />
+                            <label htmlFor="teamName">Team Name</label>
+                            <input type="text" id="teamName" name="teamName" value={formData.teamName} onChange={handleInputChange} onBlur={handleBlur} />
                         </div>
                         <div className="form-group">
                             <label htmlFor="email">Email</label>
                             <input type="email" id="email" name="email" value={formData.email} onChange={handleInputChange} onBlur={handleBlur} />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="role">Role</label>
-                            <input type="text" id="role" name="role" value={formData.role} onChange={handleInputChange} onBlur={handleBlur} />
+                            <label htmlFor="projectTitle">Project Title</label>
+                            <input type="text" id="projectTitle" name="projectTitle" value={formData.projectTitle} onChange={handleInputChange} onBlur={handleBlur} />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="experienceLevel">Experience Level</label>
-                            <input type="text" id="experienceLevel" name="experienceLevel" value={formData.experienceLevel} onChange={handleInputChange} onBlur={handleBlur} />
+                            <label htmlFor="description">Project Description</label>
+                            <textarea id="description" name="description" value={formData.description} onChange={handleInputChange} onBlur={handleBlur} rows={4} />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="team">Team</label>
-                            <input type="text" id="team" name="team" value={formData.team} onChange={handleInputChange} onBlur={handleBlur} />
+                            <label htmlFor="programmingLanguages">Programming Languages</label>
+                            <input type="text" id="programmingLanguages" name="programmingLanguages" value={formData.programmingLanguages} onChange={handleInputChange} onBlur={handleBlur} />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="links">Links</label>
-                            <input type="text" id="links" name="links" value={formData.links} onChange={handleInputChange} onBlur={handleBlur} />
+                            <label htmlFor="githubUrl">Github URL</label>
+                            <input type="text" id="githubUrl" name="githubUrl" value={formData.githubUrl} onChange={handleInputChange} onBlur={handleBlur} />
                         </div>
                     </section>
 
                     <section className="form-section">
                         <h2>03 // CREATE ACCOUNT</h2>
                         <div className="form-group">
-                            <label htmlFor="username">Username</label>
-                            <input type="text" id="username" name="username" value={formData.username} onChange={handleInputChange} onBlur={handleBlur} />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="password">Password</label>
-                            <input type="password" id="password" name="password" value={formData.password} onChange={handleInputChange} onBlur={handleBlur} />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="confirmPassword">Confirm Password</label>
-                            <input type="password" id="confirmPassword" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} onBlur={handleBlur} />
+                            <label htmlFor="participants">Number of Participants</label>
+                            <select id="participants" name="participants" value={formData.participants} onChange={handleInputChange} onBlur={handleBlur}>
+                                {[1, 2, 3, 4, 5].map(n => (
+                                    <option key={n} value={n}>
+                                        {n}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                     </section>
 
