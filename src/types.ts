@@ -41,6 +41,16 @@ export interface PostSurvey {
   part23_feltIrritated: number;
 }
 
+export interface RegistrationData {
+  teamName: string;
+  projectTitle: string;
+  description: string;
+  programmingLanguages: string;
+  email: string;
+  githubUrl: string;
+  participants: number;
+}
+
 export interface ErrorEvent {
   errorId: string;
   type: ErrorType;
@@ -50,6 +60,7 @@ export interface ErrorEvent {
 
 export interface SessionData {
   demographics: Demographics;
+  registration: RegistrationData;
   postSurvey: PostSurvey;
   startTime: number | null;
   endTime: number | null;

@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { ErrorMessage } from '../data/errors';
 import { ErrorPopup } from './ErrorPopup';
-import type { ErrorEvent } from '../types';
+import type { ErrorEvent, RegistrationData } from '../types';
 import { FieldErrorManager } from '../components/FieldErrorManager';
 import Header from './Header';
 import Footer from './Footer';
 
 interface Props {
-    onComplete: (errorEvents: ErrorEvent[]) => void;
+    onComplete: (formData: RegistrationData, errorEvents: ErrorEvent[]) => void;
 }
 
 export const RegistrationPage: React.FC<Props> = ({ onComplete }) => {
@@ -117,7 +117,7 @@ export const RegistrationPage: React.FC<Props> = ({ onComplete }) => {
         e.preventDefault();
         const mgr = errorManagerRef.current;
         if (!mgr) {
-            onComplete(errorEvents);
+            onComplete(formData, errorEvents);
             return;
         }
 
@@ -144,7 +144,7 @@ export const RegistrationPage: React.FC<Props> = ({ onComplete }) => {
 
         const finalEvents = mgr.getEvents();
         setErrorEvents(finalEvents);
-        onComplete(finalEvents);
+        onComplete(formData, finalEvents);
     };
 
     return (
