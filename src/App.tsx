@@ -89,7 +89,7 @@ function App() {
   const handlePostSurveySubmit = async () => {
     try {
       // Send data to Google Sheets
-      await fetch('https://script.google.com/macros/s/AKfycbx8X-fU4l5xKUT_77AB3tN_Flut88EN7oI63PfTcU6Sz28bq53M4RhKonv-N2Yf7pIkdA/exec', {
+      await fetch('https://script.google.com/macros/s/AKfycbyUMwVwKqp6o48C4KyXAM4jh6dqqZB97orXoNch9W4GDVmPQ_gJV9ytmuETp5w7OvHHqg/exec', {
         method: 'POST',
         mode: 'no-cors', // Handle CORS for Google Apps Script
         headers: {

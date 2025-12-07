@@ -13,7 +13,7 @@ Session data is automatically saved to Google Sheets when users complete the pos
 
 ### Google Sheets Setup
 
-Data is sent to: `https://script.google.com/macros/s/AKfycbx8X-fU4l5xKUT_77AB3tN_Flut88EN7oI63PfTcU6Sz28bq53M4RhKonv-N2Yf7pIkdA/exec`
+Data is sent to: `https://script.google.com/macros/s/AKfycbyUMwVwKqp6o48C4KyXAM4jh6dqqZB97orXoNch9W4GDVmPQ_gJV9ytmuETp5w7OvHHqg/exec`
 
 Make sure your Google Sheet has these column headers (row 1):
 
