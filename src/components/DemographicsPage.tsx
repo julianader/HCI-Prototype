@@ -78,7 +78,7 @@ export const DemographicsPage: React.FC<Props> = ({ data, onChange, onNext }) =>
       <div className="demographics-card">
         <h2>Part 1</h2>
         <LikertScale
-          label="Current Mood"
+          label="How would you rate your current mood?"
           name="currentMood"
           value={data.currentMood}
           onChange={handleLikertChange}
