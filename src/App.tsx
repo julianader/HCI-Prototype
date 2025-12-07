@@ -77,10 +77,6 @@ function App() {
   };
 
   const handleRegistrationComplete = (formData: any, errorEvents: ErrorEvent[]) => {
-    console.log('=== DEBUG: Registration Complete ===');
-    console.log('Form data received:', formData);
-    console.log('Error events:', errorEvents);
-
     setSessionData(prev => ({
       ...prev,
       registration: formData,
@@ -91,11 +87,6 @@ function App() {
   };
 
   const handlePostSurveySubmit = async () => {
-    // Debug: Check what data we're about to send
-    console.log('=== DEBUG: Session Data Being Sent ===');
-    console.log('Full sessionData:', JSON.stringify(sessionData, null, 2));
-    console.log('Registration data specifically:', sessionData.registration);
-
     try {
       // Send data to Google Sheets
       const response = await fetch('https://script.google.com/macros/s/AKfycbx8X-fU4l5xKUT_77AB3tN_Flut88EN7oI63PfTcU6Sz28bq53M4RhKonv-N2Yf7pIkdA/exec', {
@@ -107,7 +98,7 @@ function App() {
         body: JSON.stringify(sessionData),
       });
 
-      console.log('Data submission completed, response status:', response.status);
+      console.log('Data saved successfully');
     } catch (error) {
       console.error('Failed to save data:', error);
       // Still proceed to thank you page even if saving fails
