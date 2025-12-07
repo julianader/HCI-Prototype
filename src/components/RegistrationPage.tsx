@@ -54,10 +54,11 @@ export const RegistrationPage: React.FC<Props> = ({ onComplete }) => {
         const mgr = errorManagerRef.current;
         if (!mgr) return;
 
+        // Don't trigger new errors if an error is already showing
+        if (currentError) return;
+
         const error = mgr.handleFieldBlur(name, value);
-        if (error) {
-            setCurrentError(error);
-        }
+        setCurrentError(error);
     };
 
     const handleCloseError = () => {
