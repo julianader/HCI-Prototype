@@ -11,9 +11,6 @@ interface LikertScaleProps {
   useEmojis?: boolean;
 }
 
-const confidenceEmojis = ["1f61f", "1f641", "1f610", "1f642", "1f60a", "1f601", "1f60e"];
-const moodEmojis = ["1f621", "2639-fe0f", "1f610", "1f642", "1f60a", "1f601", "1f929"];
-
 export const LikertScale: React.FC<LikertScaleProps> = ({ label, value, name, onChange, minLabel, maxLabel, useEmojis }) => {
   // Use 5-point scale for Part 2, fallback to 7-point for others
   const isPart2 = name.startsWith('part2_');
@@ -51,8 +48,8 @@ export const LikertScale: React.FC<LikertScaleProps> = ({ label, value, name, on
                   background: 'transparent',
                   border: value === pointValue ? '2px solid #222' : '1px solid #ccc',
                   borderRadius: '50%',
-                  width: 36,
-                  height: 36,
+                  width: 48,
+                  height: 48,
                   margin: '0 12px',
                   transition: 'border 0.2s',
                   boxShadow: value === pointValue ? '0 0 0 2px #34D399' : 'none',
@@ -61,9 +58,19 @@ export const LikertScale: React.FC<LikertScaleProps> = ({ label, value, name, on
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  padding: 0,
                 }}
               >
-                <span className="emoji">
+                <span className="emoji" style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '40px',
+                  height: '40px',
+                  margin: 0,
+                  lineHeight: '40px',
+                  fontSize: '32px',
+                }}>
                   <Emoji unified={emojiList[index]} size={32} />
                 </span>
               </button>
