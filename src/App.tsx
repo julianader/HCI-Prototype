@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DemographicsPage } from './components/DemographicsPage';
 import { RegistrationPage } from './components/RegistrationPage';
 import { SummaryPage } from './components/SummaryPage';
@@ -19,6 +19,14 @@ function App() {
     endTime: null,
     errorEvents: []
   });
+
+  useEffect(() => {
+    if (page === 0) {
+      document.body.classList.add('demographics-page');
+    } else {
+      document.body.classList.remove('demographics-page');
+    }
+  }, [page]);
 
   const handleDemographicsChange = (data: Demographics) => {
     setSessionData(prev => ({ ...prev, demographics: data }));
