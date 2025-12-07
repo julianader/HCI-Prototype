@@ -13,7 +13,11 @@ function App() {
       age: '',
       gender: '',
       computerConfidence: 4,
-      currentMood: 4
+      currentMood: 4,
+      part2_confidentUsingComputers: 3,
+      part2_solveWebsiteProblems: 3,
+      part2_exploreInterfaces: 3,
+      part2_errorsConfidence: 3
     },
     startTime: null,
     endTime: null,
