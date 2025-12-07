@@ -78,19 +78,19 @@ export const DemographicsPage: React.FC<Props> = ({ data, onChange, onNext }) =>
       <div className="demographics-card">
         <h2>Part 1</h2>
         <LikertScale
-          label="How would you rate your current mood?"
-          name="currentMood"
-          value={data.currentMood}
-          onChange={handleLikertChange}
-        />
-      </div>
-      
-      <div className="demographics-card">
-        <h2>Part 2</h2>
-        <LikertScale
           label="Computer Confidence"
           name="computerConfidence"
           value={data.computerConfidence}
+          onChange={handleLikertChange}
+        />
+      </div>
+
+      <div className="demographics-card">
+        <h2>Part 2</h2>
+        <LikertScale
+          label="Current Mood"
+          name="currentMood"
+          value={data.currentMood}
           onChange={handleLikertChange}
         />
       </div>
