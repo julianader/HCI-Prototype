@@ -30,10 +30,10 @@ function App() {
   };
 
   const handleRegistrationComplete = (errorEvents: ErrorEvent[]) => {
-    setSessionData(prev => ({ 
-      ...prev, 
+    setSessionData(prev => ({
+      ...prev,
       endTime: Date.now(),
-      errorEvents 
+      errorEvents
     }));
     setPage(2);
   };
@@ -41,19 +41,19 @@ function App() {
   return (
     <div className="container">
       {page === 0 && (
-        <DemographicsPage 
-          data={sessionData.demographics} 
-          onChange={handleDemographicsChange} 
-          onNext={handleDemographicsNext} 
+        <DemographicsPage
+          data={sessionData.demographics}
+          onChange={handleDemographicsChange}
+          onNext={handleDemographicsNext}
         />
       )}
-      
+
       {page === 1 && (
-        <RegistrationPage 
-          onComplete={handleRegistrationComplete} 
+        <RegistrationPage
+          onComplete={handleRegistrationComplete}
         />
       )}
-      
+
       {page === 2 && (
         <SummaryPage sessionData={sessionData} />
       )}
