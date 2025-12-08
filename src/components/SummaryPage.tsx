@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { SessionData, PostSurvey, ErrorEvent } from '../types';
 import { LikertScale } from './LikertScale';
 import { AlertCircle, AlertTriangle, XCircle, Wifi } from 'lucide-react';
@@ -11,6 +11,7 @@ interface Props {
 
 export const SummaryPage: React.FC<Props> = ({ sessionData, onPostSurveyChange, onSubmit }) => {
   const { startTime, endTime, postSurvey, errorEvents } = sessionData;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const duration = (startTime && endTime) ? (endTime - startTime) / 1000 : 0;
   const minutes = Math.floor(duration / 60);
@@ -21,6 +22,15 @@ export const SummaryPage: React.FC<Props> = ({ sessionData, onPostSurveyChange, 
       ...postSurvey,
       [name]: value
     });
+  };
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      await onSubmit();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getIcon = (iconName: string) => {
@@ -336,12 +346,74 @@ export const SummaryPage: React.FC<Props> = ({ sessionData, onPostSurveyChange, 
       <div style={{ textAlign: 'right' }}>
         <button
           className="btn btn-primary"
-          onClick={onSubmit}
-          style={{ opacity: 1, cursor: 'pointer' }}
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+          style={{
+            opacity: isSubmitting ? 0.6 : 1,
+            cursor: isSubmitting ? 'not-allowed' : 'pointer'
+          }}
         >
-          Submit Survey
+          {isSubmitting ? 'Submitting...' : 'Submit Survey'}
         </button>
       </div>
+
+      {isSubmitting && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999
+        }}>
+          <div style={{
+            backgroundColor: '#1a1a1a',
+            borderRadius: '12px',
+            padding: '2rem',
+            textAlign: 'center',
+            border: '1px solid #333',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.5)'
+          }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              border: '3px solid #333',
+              borderTop: '3px solid #54f55a',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+              margin: '0 auto 1rem auto'
+            }}></div>
+            <h3 style={{
+              color: '#fff',
+              margin: '0 0 0.5rem 0',
+              fontSize: '1.2rem'
+            }}>
+              Submitting Survey...
+            </h3>
+            <p style={{
+              color: '#ccc',
+              margin: 0,
+              fontSize: '0.9rem'
+            }}>
+              Please wait while we save your data
+            </p>
+          </div>
+        </div>
+      )}
+
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `
+      }} />
     </div>
   );
 };
