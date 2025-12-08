@@ -90,8 +90,8 @@ function App() {
 
   const handlePostSurveySubmit = async () => {
     try {
-      // Send data to Google Sheets
-      await fetch('https://script.google.com/macros/s/AKfycbyUMwVwKqp6o48C4KyXAM4jh6dqqZB97orXoNch9W4GDVmPQ_gJV9ytmuETp5w7OvHHqg/exec', {
+      // Send data to Google Sheets - UPDATE THIS URL WITH YOUR NEW DEPLOYMENT URL
+      const response = await fetch('https://script.google.com/macros/s/AKfycbwuKhs6_yrlmTZQP5B1LF8lOcVIycHgyTz9MF5OBzP9ijUDhy5xCUM_4tI717Jjj_SlGw/exec', {
         method: 'POST',
         mode: 'no-cors', // Handle CORS for Google Apps Script
         headers: {
@@ -101,6 +101,7 @@ function App() {
       });
 
       console.log('Data being sent to Google Sheets:', sessionData);
+      console.log('Response status:', response.status);
 
       console.log('Data saved successfully');
     } catch (error) {
