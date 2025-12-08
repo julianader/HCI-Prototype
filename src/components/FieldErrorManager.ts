@@ -70,7 +70,7 @@ export class FieldErrorManager {
         const ctx: FieldErrorStrategyContext = {
             shownTypes: this.shownTypes,
             allTypes: this.allTypes,
-            enforceScenarioSequence: false,
+            enforceScenarioSequence: true,
             pickVariantWithTypePreference: (variants: FieldErrorResult[]) =>
                 this.pickVariantWithTypePreference(variants),
         };
@@ -78,14 +78,14 @@ export class FieldErrorManager {
         const res = this.submitStrategy.validate(formData, ctx);
         if (!res) return null;
 
-        return this.buildError('submit', res, false); // Submit errors don't advance scenario counter
+        return this.buildError('submit', res, true); // Submit errors now advance scenario counter
     }
 
     public getRandomConnectionError(): any | null {
         const ctx: FieldErrorStrategyContext = {
             shownTypes: this.shownTypes,
             allTypes: this.allTypes,
-            enforceScenarioSequence: false,
+            enforceScenarioSequence: true,
             pickVariantWithTypePreference: (variants: FieldErrorResult[]) =>
                 this.pickVariantWithTypePreference(variants),
         };
@@ -93,7 +93,7 @@ export class FieldErrorManager {
         const res = this.randomStrategy.getRandomError(ctx);
         if (!res) return null;
 
-        return this.buildError('connection', res, false); // Random errors don't advance scenario counter
+        return this.buildError('connection', res, true); // Random errors now advance scenario counter
     }
 
     public handleClose(error: any): void {
