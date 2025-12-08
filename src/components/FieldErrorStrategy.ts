@@ -12,6 +12,7 @@ export interface FieldErrorResult {
 export interface FieldErrorStrategyContext {
     shownTypes: Set<ErrorType>;
     allTypes: ErrorType[];
+    enforceScenarioSequence: boolean;
 
     pickVariantWithTypePreference(variants: FieldErrorResult[]): FieldErrorResult;
 }

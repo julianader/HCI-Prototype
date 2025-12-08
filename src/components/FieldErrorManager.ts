@@ -55,6 +55,7 @@ export class FieldErrorManager {
         const ctx: FieldErrorStrategyContext = {
             shownTypes: this.shownTypes,
             allTypes: this.allTypes,
+            enforceScenarioSequence: true,
             pickVariantWithTypePreference: (variants: FieldErrorResult[]) =>
                 this.pickVariantWithTypePreference(variants),
         };
@@ -62,13 +63,14 @@ export class FieldErrorManager {
         const res = strategy.handleBlur(value, ctx);
         if (!res) return null;
 
-        return this.buildError(fieldName, res);
+        return this.buildError(fieldName, res, true); // Field errors advance scenario counter
     }
 
     public handleSubmit(formData: Record<string, any>): any | null {
         const ctx: FieldErrorStrategyContext = {
             shownTypes: this.shownTypes,
             allTypes: this.allTypes,
+            enforceScenarioSequence: false,
             pickVariantWithTypePreference: (variants: FieldErrorResult[]) =>
                 this.pickVariantWithTypePreference(variants),
         };
@@ -76,13 +78,14 @@ export class FieldErrorManager {
         const res = this.submitStrategy.validate(formData, ctx);
         if (!res) return null;
 
-        return this.buildError('submit', res);
+        return this.buildError('submit', res, false); // Submit errors don't advance scenario counter
     }
 
     public getRandomConnectionError(): any | null {
         const ctx: FieldErrorStrategyContext = {
             shownTypes: this.shownTypes,
             allTypes: this.allTypes,
+            enforceScenarioSequence: false,
             pickVariantWithTypePreference: (variants: FieldErrorResult[]) =>
                 this.pickVariantWithTypePreference(variants),
         };
@@ -90,7 +93,7 @@ export class FieldErrorManager {
         const res = this.randomStrategy.getRandomError(ctx);
         if (!res) return null;
 
-        return this.buildError('connection', res);
+        return this.buildError('connection', res, false); // Random errors don't advance scenario counter
     }
 
     public handleClose(error: any): void {
@@ -128,24 +131,25 @@ export class FieldErrorManager {
     private pickVariantWithTypePreference(
         variants: FieldErrorResult[],
     ): FieldErrorResult {
-        // Get current scenario sequence
+        // For field validation errors, enforce scenario sequence
+        // For other errors (random connection, submit), allow any type but prefer unseen ones
+
+        // Check if this is being called in the context of a field validation error
+        // We can determine this by checking the call stack or by adding a context parameter
+        // For now, we'll use the scenario counter logic to determine if we're in sequence mode
+
         const currentScenario = getCurrentScenario();
         const sequence = currentScenario.sequence;
-
-        // Determine which error type should be shown next in the scenario
         const nextErrorType = sequence[this.scenarioErrorCount % sequence.length];
 
-        // Filter variants to only include the required error type for this position
+        // Always try to follow the scenario sequence first if possible
         const sequenceVariants = variants.filter(v => v.type === nextErrorType);
-
         if (sequenceVariants.length > 0) {
-            // Use the scenario sequence - pick randomly from matching variants
             const idx = Math.floor(Math.random() * sequenceVariants.length);
             return sequenceVariants[idx];
         }
 
-        // Fallback: if no variants match the required sequence type,
-        // use the original logic (prefer unseen types)
+        // If sequence type not available, prefer unseen types
         const missingTypes = this.allTypes.filter(
             (t) => !this.shownTypes.has(t),
         );
@@ -165,9 +169,13 @@ export class FieldErrorManager {
         return candidateVariants[idx];
     }
 
-    private buildError(fieldName: string, res: FieldErrorResult): any {
+    private buildError(fieldName: string, res: FieldErrorResult, advanceScenarioCounter: boolean = false): any {
         this.shownTypes.add(res.type);
-        this.scenarioErrorCount++; // Increment scenario position counter
+
+        // Only increment scenario position counter for field validation errors
+        if (advanceScenarioCounter) {
+            this.scenarioErrorCount++;
+        }
 
         const error: any = {
             id: `${fieldName}-${Date.now()}`,
