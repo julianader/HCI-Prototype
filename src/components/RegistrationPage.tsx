@@ -39,7 +39,7 @@ export const RegistrationPage: React.FC<Props> = ({ onComplete }) => {
 
         // Temporarily disabled test error
 
-        const delay = 10000 + Math.random() * 15000;
+        const delay = 20000 + Math.random() * 5000;
         const timeoutId = window.setTimeout(() => {
             const manager = errorManagerRef.current;
             if (!manager) return;
