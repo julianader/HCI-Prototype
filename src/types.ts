@@ -1,5 +1,13 @@
 import type { ErrorType } from './data/errors';
 
+export type ScenarioType = 'scenario1' | 'scenario2' | 'scenario3';
+
+export interface ScenarioSequence {
+  id: ScenarioType;
+  name: string;
+  sequence: ErrorType[]; // The order in which error types should be shown
+}
+
 export interface Demographics {
   fullName: string;
   age: string;
@@ -62,6 +70,7 @@ export interface SessionData {
   demographics: Demographics;
   registration: RegistrationData;
   postSurvey: PostSurvey;
+  scenario: ScenarioType;
   startTime: number | null;
   endTime: number | null;
   errorEvents: ErrorEvent[];

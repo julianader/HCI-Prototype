@@ -1,4 +1,5 @@
 import type { ErrorType } from '../data/errors';
+import { getCurrentScenario } from '../data/errors';
 import type { ErrorEvent } from '../types';
 import type {
     FieldErrorStrategy,
@@ -24,6 +25,9 @@ export class FieldErrorManager {
         'neutral',
         'non-apologetic',
     ];
+
+    // Scenario tracking
+    private scenarioErrorCount: number = 0;
 
     private strategies: Map<string, FieldErrorStrategy>;
 
@@ -111,9 +115,34 @@ export class FieldErrorManager {
         return this.allTypes.filter((t) => !this.shownTypes.has(t));
     }
 
+    public resetScenario(): void {
+        this.shownTypes.clear();
+        this.scenarioErrorCount = 0;
+        this.events = [];
+        this.currentErrorStartTime = null;
+    }
+
     private pickVariantWithTypePreference(
         variants: FieldErrorResult[],
     ): FieldErrorResult {
+        // Get current scenario sequence
+        const currentScenario = getCurrentScenario();
+        const sequence = currentScenario.sequence;
+
+        // Determine which error type should be shown next in the scenario
+        const nextErrorType = sequence[this.scenarioErrorCount % sequence.length];
+
+        // Filter variants to only include the required error type for this position
+        const sequenceVariants = variants.filter(v => v.type === nextErrorType);
+
+        if (sequenceVariants.length > 0) {
+            // Use the scenario sequence - pick randomly from matching variants
+            const idx = Math.floor(Math.random() * sequenceVariants.length);
+            return sequenceVariants[idx];
+        }
+
+        // Fallback: if no variants match the required sequence type,
+        // use the original logic (prefer unseen types)
         const missingTypes = this.allTypes.filter(
             (t) => !this.shownTypes.has(t),
         );
@@ -135,6 +164,7 @@ export class FieldErrorManager {
 
     private buildError(fieldName: string, res: FieldErrorResult): any {
         this.shownTypes.add(res.type);
+        this.scenarioErrorCount++; // Increment scenario position counter
 
         const error: any = {
             id: `${fieldName}-${Date.now()}`,

@@ -293,11 +293,49 @@ const NON_APOLOGETIC_ERRORS: ErrorMessage[] = [
   }, 
 ]; 
  
-export const ALL_ERRORS = [ 
-  ...APOLOGETIC_ERRORS, 
-  ...NEUTRAL_ERRORS, 
-  ...NON_APOLOGETIC_ERRORS, 
-]; 
+export const ALL_ERRORS = [
+  ...APOLOGETIC_ERRORS,
+  ...NEUTRAL_ERRORS,
+  ...NON_APOLOGETIC_ERRORS,
+];
+
+// Scenario definitions
+export type ScenarioType = 'scenario1' | 'scenario2' | 'scenario3';
+
+export interface ScenarioSequence {
+  id: ScenarioType;
+  name: string;
+  sequence: ErrorType[]; // The order in which error types should be shown
+}
+
+export const SCENARIOS: ScenarioSequence[] = [
+  {
+    id: 'scenario1',
+    name: 'Non-apologetic → Neutral → Apologetic',
+    sequence: ['non-apologetic', 'neutral', 'apologetic'],
+  },
+  {
+    id: 'scenario2',
+    name: 'Neutral → Non-apologetic → Apologetic',
+    sequence: ['neutral', 'non-apologetic', 'apologetic'],
+  },
+  {
+    id: 'scenario3',
+    name: 'Apologetic → Neutral → Non-apologetic',
+    sequence: ['apologetic', 'neutral', 'non-apologetic'],
+  },
+];
+
+// Current active scenario - can be changed to switch between scenarios
+export let CURRENT_SCENARIO: ScenarioType = 'scenario2';
+
+export function setCurrentScenario(scenario: ScenarioType): void {
+  CURRENT_SCENARIO = scenario;
+}
+
+export function getCurrentScenario(): ScenarioSequence {
+  return SCENARIOS.find(s => s.id === CURRENT_SCENARIO)!;
+} 
  
 /** 
  * Get a random error message 

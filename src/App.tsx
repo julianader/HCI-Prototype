@@ -4,6 +4,7 @@ import { RegistrationPage } from './components/RegistrationPage';
 import { SummaryPage } from './components/SummaryPage';
 import { ThankYouPage } from './components/ThankYouPage';
 import type { Demographics, PostSurvey, SessionData, ErrorEvent } from './types';
+import { CURRENT_SCENARIO } from './data/errors';
 import './styles/main.scss';
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
       part23_clearUnderstandable: 3,
       part23_feltIrritated: 3
     },
+    scenario: CURRENT_SCENARIO,
     startTime: null,
     endTime: null,
     errorEvents: []
@@ -97,6 +99,8 @@ function App() {
         },
         body: JSON.stringify(sessionData),
       });
+
+      console.log('Data being sent to Google Sheets:', sessionData);
 
       console.log('Data saved successfully');
     } catch (error) {
