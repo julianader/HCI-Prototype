@@ -152,7 +152,7 @@ export const SummaryPage: React.FC<Props> = ({ sessionData, onPostSurveyChange, 
       </div>
 
       <div className="demographics-card">
-        <h2>Part 2.1 - Neutral Error Messages</h2>
+        <h2>Part 2.1</h2>
         <div style={{ marginBottom: '1.5rem' }}>
           <p style={{ marginBottom: '0.5rem', fontWeight: 'bold' }}>
             ERROR MESSAGES THAT SHOWED DURING REGISTRATION
@@ -216,7 +216,7 @@ export const SummaryPage: React.FC<Props> = ({ sessionData, onPostSurveyChange, 
       </div>
 
       <div className="demographics-card">
-        <h2>Part 2.2 - Non-Apologetic Error Messages</h2>
+        <h2>Part 2.2</h2>
         <div style={{ marginBottom: '1.5rem' }}>
           <p style={{ marginBottom: '0.5rem', fontWeight: 'bold' }}>
             ERROR MESSAGES THAT SHOWED DURING REGISTRATION
@@ -280,7 +280,7 @@ export const SummaryPage: React.FC<Props> = ({ sessionData, onPostSurveyChange, 
       </div>
 
       <div className="demographics-card">
-        <h2>Part 2.3 - Apologetic Error Messages</h2>
+        <h2>Part 2.3</h2>
         <div style={{ marginBottom: '1.5rem' }}>
           <p style={{ marginBottom: '0.5rem', fontWeight: 'bold' }}>
             ERROR MESSAGES THAT SHOWED DURING REGISTRATION
