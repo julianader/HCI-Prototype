@@ -99,6 +99,9 @@ export class FieldErrorManager {
         const event: ErrorEvent = {
             errorId: error.id,
             type: error.type,
+            title: error.title,
+            message: error.message,
+            icon: error.icon,
             shownAt: this.currentErrorStartTime,
             resolvedAt: Date.now(),
         };

@@ -1,6 +1,7 @@
 import React from 'react';
-import type { SessionData, PostSurvey } from '../types';
+import type { SessionData, PostSurvey, ErrorEvent } from '../types';
 import { LikertScale } from './LikertScale';
+import { AlertCircle, AlertTriangle, XCircle, Wifi } from 'lucide-react';
 
 interface Props {
   sessionData: SessionData;
@@ -9,7 +10,7 @@ interface Props {
 }
 
 export const SummaryPage: React.FC<Props> = ({ sessionData, onPostSurveyChange, onSubmit }) => {
-  const { startTime, endTime, postSurvey } = sessionData;
+  const { startTime, endTime, postSurvey, errorEvents } = sessionData;
 
   const duration = (startTime && endTime) ? (endTime - startTime) / 1000 : 0;
   const minutes = Math.floor(duration / 60);
@@ -21,6 +22,103 @@ export const SummaryPage: React.FC<Props> = ({ sessionData, onPostSurveyChange, 
       [name]: value
     });
   };
+
+  const getIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'alert': return <AlertCircle size={16} />;
+      case 'warning': return <AlertTriangle size={16} />;
+      case 'error': return <XCircle size={16} />;
+      case 'wifi': return <Wifi size={16} />;
+      default: return <AlertCircle size={16} />;
+    }
+  };
+
+  const groupErrorsByType = (events: ErrorEvent[]) => {
+    const grouped: { [key: string]: ErrorEvent[] } = {
+      'neutral': [],
+      'non-apologetic': [],
+      'apologetic': []
+    };
+
+    events.forEach(event => {
+      if (grouped[event.type]) {
+        grouped[event.type].push(event);
+      }
+    });
+
+    return grouped;
+  };
+
+  const getIconColor = (errorType: string) => {
+    switch (errorType) {
+      case 'apologetic': return '#34d399'; // green
+      case 'neutral': return '#64748b'; // gray
+      case 'non-apologetic': return '#f87171'; // red
+      default: return '#ef4444'; // fallback red
+    }
+  };
+
+  const getBorderColor = (errorType: string) => {
+    switch (errorType) {
+      case 'apologetic': return '#10b981'; // green border
+      case 'neutral': return '#475569'; // gray border
+      case 'non-apologetic': return '#ef4444'; // red border
+      default: return '#ef4444'; // fallback red
+    }
+  };
+
+  const renderErrorMessages = (errors: ErrorEvent[]) => {
+    if (errors.length === 0) {
+      return <p style={{ fontStyle: 'italic', color: '#666' }}>No errors of this type were shown during registration.</p>;
+    }
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        {errors.map((error, index) => (
+          <div key={`${error.errorId}-${index}`} style={{
+            border: `1px solid ${getBorderColor(error.type)}`,
+            borderRadius: '12px',
+            padding: '1rem',
+            backgroundColor: '#1a1a1a',
+            fontSize: '0.9rem',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.3)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+              <div style={{
+                padding: '0.5rem',
+                borderRadius: '8px',
+                backgroundColor: '#3a3a3a',
+                color: getIconColor(error.type),
+                boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
+              }}>
+                {getIcon(error.icon)}
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{
+                  fontWeight: '700',
+                  fontSize: '1rem',
+                  marginBottom: '0.5rem',
+                  color: '#ffffff'
+                }}>
+                  {error.title}
+                </div>
+                <div style={{
+                  color: '#ffffff',
+                  opacity: 0.9,
+                  lineHeight: '1.5',
+                  fontSize: '0.95rem'
+                }}>
+                  {error.message}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const errorGroups = groupErrorsByType(errorEvents);
 
   return (
     <div className="demographics-container">
@@ -44,9 +142,15 @@ export const SummaryPage: React.FC<Props> = ({ sessionData, onPostSurveyChange, 
       </div>
 
       <div className="demographics-card">
-        <h2>Part 2.1</h2>
+        <h2>Part 2.1 - Neutral Error Messages</h2>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <p style={{ marginBottom: '0.5rem', fontWeight: 'bold' }}>
+            ERROR MESSAGES THAT SHOWED DURING REGISTRATION
+          </p>
+          {renderErrorMessages(errorGroups.neutral)}
+        </div>
         <p style={{ marginBottom: '1rem' }}>
-          Please rate how much you agree with the following statements about the error above.<br />
+          Please rate how much you agree with the following statements about the error messages above.<br />
           <span style={{ fontSize: '0.95em', color: '#666' }}>
             1 - Strongly disagree, 5 - Strongly agree.
           </span>
@@ -102,9 +206,15 @@ export const SummaryPage: React.FC<Props> = ({ sessionData, onPostSurveyChange, 
       </div>
 
       <div className="demographics-card">
-        <h2>Part 2.2</h2>
+        <h2>Part 2.2 - Non-Apologetic Error Messages</h2>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <p style={{ marginBottom: '0.5rem', fontWeight: 'bold' }}>
+            ERROR MESSAGES THAT SHOWED DURING REGISTRATION
+          </p>
+          {renderErrorMessages(errorGroups['non-apologetic'])}
+        </div>
         <p style={{ marginBottom: '1rem' }}>
-          Please rate how much you agree with the following statements about the error above.<br />
+          Please rate how much you agree with the following statements about the error messages above.<br />
           <span style={{ fontSize: '0.95em', color: '#666' }}>
             1 - Strongly disagree, 5 - Strongly agree.
           </span>
@@ -160,9 +270,15 @@ export const SummaryPage: React.FC<Props> = ({ sessionData, onPostSurveyChange, 
       </div>
 
       <div className="demographics-card">
-        <h2>Part 2.3</h2>
+        <h2>Part 2.3 - Apologetic Error Messages</h2>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <p style={{ marginBottom: '0.5rem', fontWeight: 'bold' }}>
+            ERROR MESSAGES THAT SHOWED DURING REGISTRATION
+          </p>
+          {renderErrorMessages(errorGroups.apologetic)}
+        </div>
         <p style={{ marginBottom: '1rem' }}>
-          Please rate how much you agree with the following statements about the error above.<br />
+          Please rate how much you agree with the following statements about the error messages above.<br />
           <span style={{ fontSize: '0.95em', color: '#666' }}>
             1 - Strongly disagree, 5 - Strongly agree.
           </span>

@@ -62,6 +62,9 @@ export interface RegistrationData {
 export interface ErrorEvent {
   errorId: string;
   type: ErrorType;
+  title: string;
+  message: string;
+  icon: string;
   shownAt: number;
   resolvedAt: number;
 }
