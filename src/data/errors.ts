@@ -327,7 +327,7 @@ export const SCENARIOS: ScenarioSequence[] = [
 ];
 
 // Current active scenario - can be changed to switch between scenarios
-export let CURRENT_SCENARIO: ScenarioType = 'scenario1';
+export let CURRENT_SCENARIO: ScenarioType = 'scenario2';
 
 export function setCurrentScenario(scenario: ScenarioType): void {
   CURRENT_SCENARIO = scenario;
